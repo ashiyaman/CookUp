@@ -121,6 +121,35 @@ app.get('/recipes/author/:recipeAuthor', async (req, res) => {
     }
 })
 
+//Find recipe by id and update it value
+
+const updateRecipe = async(recipeId, dataToUpdate) => {
+    try{
+        const recipe = await Recipe.findByIdAndUpdate(recipeId, dataToUpdate, {new: true})
+        if(recipe){
+            return recipe
+        }
+    }
+    catch(error){
+       throw error 
+    }
+}
+
+app.post('/recipes/:recipeId', async (req, res) => {
+    try{
+        const updatedRecipe = await updateRecipe(req.params.recipeId, req.body)
+        if(updatedRecipe){
+            res.status(200).json({message: 'Recipe updated successfully.', recipe: updatedRecipe})
+        }
+        else{
+            res.status(404).json({error: 'Recipe not found.'})
+        }        
+    }
+    catch{
+        res.status(500).json({error: 'Error while fetching recipe.'})
+    }
+})
+
 app.listen(PORT, () => {
     console.log('Server is running on port', PORT)
 })
