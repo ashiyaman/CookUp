@@ -65,6 +65,62 @@ app.get('/recipes', async (req, res) => {
     }
 })
 
+//Get recipe by its title
+
+const readRecipeByTitle = async(recipeTitle) => {
+    try{
+        const recipe = await Recipe.find({title: recipeTitle})
+        console.log('rec...', recipe)
+        return recipe
+    }
+    catch(error){
+        throw error
+    }
+}
+
+app.get('/recipes/title/:recipeTitle', async (req, res) => {
+    try{
+        const recipe = await readRecipeByTitle(req.params.recipeTitle)
+        console.log(recipe)
+        if(recipe){
+            res.send(recipe)
+        }
+        else{
+            res.status(404).json({error: 'No recipes found.'})
+        }
+    }
+    catch{
+        res.status(500).json({error: 'Error while fetching recipes.'})
+    }
+})
+
+//Get recipe by its author
+
+const readRecipeByAuthor = async(author) => {
+    try{
+        const recipe = await Recipe.find({author: author})
+        return recipe
+    }
+    catch(error){
+        throw error
+    }
+}
+
+app.get('/recipes/author/:recipeAuthor', async (req, res) => {
+    try{
+        const recipe = await readRecipeByAuthor(req.params.recipeAuthor)
+        if(recipe){
+            res.send(recipe)
+        }
+        else{
+            res.status(404).json({error: 'No recipes found.'})
+        }
+    }
+    catch{
+        res.status(500).json({error: 'Error while fetching recipes.'})
+    }
+})
+
 app.listen(PORT, () => {
     console.log('Server is running on port', PORT)
 })
