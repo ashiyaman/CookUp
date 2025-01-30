@@ -1,9 +1,11 @@
 const express = require('express')
+const cors = require("cors");
 const Recipe = require('./models/recipe.models.js')
 const {initializeDatabase} = require('./db/db.connect')
 const PORT = process.env.PORT || 3000
 
 const app = express()
+app.use(cors());
 app.use(express.json())
 initializeDatabase()
 
