@@ -70,7 +70,6 @@ app.get('/recipes', async (req, res) => {
 const readRecipeByTitle = async(recipeTitle) => {
     try{
         const recipe = await Recipe.find({title: recipeTitle})
-        console.log('rec...', recipe)
         return recipe
     }
     catch(error){
@@ -81,7 +80,6 @@ const readRecipeByTitle = async(recipeTitle) => {
 app.get('/recipes/title/:recipeTitle', async (req, res) => {
     try{
         const recipe = await readRecipeByTitle(req.params.recipeTitle)
-        console.log(recipe)
         if(recipe){
             res.send(recipe)
         }
@@ -138,6 +136,40 @@ const updateRecipe = async(recipeId, dataToUpdate) => {
 app.post('/recipes/:recipeId', async (req, res) => {
     try{
         const updatedRecipe = await updateRecipe(req.params.recipeId, req.body)
+        if(updatedRecipe){
+            res.status(200).json({message: 'Recipe updated successfully.', recipe: updatedRecipe})
+        }
+        else{
+            res.status(404).json({error: 'Recipe not found.'})
+        }        
+    }
+    catch{
+        res.status(500).json({error: 'Error while fetching recipe.'})
+    }
+})
+
+//Find recipe by id and update it value
+
+const updateRecipeByTitle = async(recipeTitle, dataToUpdate) => {
+    try{
+        console.log(recipeTitle, dataToUpdate)
+        //const recipeToUpdate = await readRecipeByTitle(recipeTitle)
+        //console.log(recipeToUpdate)
+        const recipe = await Recipe.findByIdAndUpdate(await readRecipeByTitle(recipeTitle), dataToUpdate, {new: true})
+        console.log('rec....', recipe)
+        if(recipe){
+            return recipe
+        }
+    }
+    catch(error){
+       throw error 
+    }
+}
+
+app.post('/recipes/title/:recipeTitle', async (req, res) => {
+    try{
+        const updatedRecipe = await updateRecipeByTitle(req.params.recipeTitle, req.body)
+        console.log('...upda...', updatedRecipe)
         if(updatedRecipe){
             res.status(200).json({message: 'Recipe updated successfully.', recipe: updatedRecipe})
         }
