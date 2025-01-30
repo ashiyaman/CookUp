@@ -148,15 +148,12 @@ app.post('/recipes/:recipeId', async (req, res) => {
     }
 })
 
-//Find recipe by id and update it value
+//Find recipe by title and update it value
 
 const updateRecipeByTitle = async(recipeTitle, dataToUpdate) => {
     try{
         console.log(recipeTitle, dataToUpdate)
-        //const recipeToUpdate = await readRecipeByTitle(recipeTitle)
-        //console.log(recipeToUpdate)
         const recipe = await Recipe.findByIdAndUpdate(await readRecipeByTitle(recipeTitle), dataToUpdate, {new: true})
-        console.log('rec....', recipe)
         if(recipe){
             return recipe
         }
@@ -179,6 +176,33 @@ app.post('/recipes/title/:recipeTitle', async (req, res) => {
     }
     catch{
         res.status(500).json({error: 'Error while fetching recipe.'})
+    }
+})
+
+//Find recipe by id and delete from db
+
+const deleteRecipe = async(recipeId) => {
+    try{
+        const deletedRecipe = await Recipe.findByIdAndDelete(recipeId)
+        return deletedRecipe
+    }
+    catch(error){
+        throw error
+    }
+}
+
+app.delete('/recipes/:recipeId', async(req, res) => {
+    try{
+        const deletedRecipe = await deleteRecipe(req.params.recipeId)
+        if(deletedRecipe){
+            res.status(200).json({message: 'Recipe deleted successfully', recipe: deletedRecipe})
+        }
+        else{
+            res.status(404).json({error: 'Recipe not found'})
+        }
+    }
+    catch{
+        res.status(500).json({error: 'Error while deleting recipe'})
     }
 })
 
