@@ -44,7 +44,6 @@ const readAllRecipes = async() => {
     try{
         const recipes = await Recipe.find()
         if(recipes) {
-            console.log(recipes)
             return recipes
         }
     }
