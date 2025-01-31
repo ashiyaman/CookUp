@@ -7,7 +7,7 @@ const initializeDatabase = async() => {
     await mongoose
         .connect(mongoURI)
         .then(() => console.log('Connected to Database'))
-        .catch((error) => tconsole.log('Error Connecting to Database', error))
+        .catch((error) => console.log('Error Connecting to Database', error))
 }
 
 module.exports = {initializeDatabase}

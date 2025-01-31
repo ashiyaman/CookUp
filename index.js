@@ -154,7 +154,6 @@ app.post('/recipes/:recipeId', async (req, res) => {
 
 const updateRecipeByTitle = async(recipeTitle, dataToUpdate) => {
     try{
-        console.log(recipeTitle, dataToUpdate)
         const recipe = await Recipe.findByIdAndUpdate(await readRecipeByTitle(recipeTitle), dataToUpdate, {new: true})
         if(recipe){
             return recipe
@@ -168,7 +167,6 @@ const updateRecipeByTitle = async(recipeTitle, dataToUpdate) => {
 app.post('/recipes/title/:recipeTitle', async (req, res) => {
     try{
         const updatedRecipe = await updateRecipeByTitle(req.params.recipeTitle, req.body)
-        console.log('...upda...', updatedRecipe)
         if(updatedRecipe){
             res.status(200).json({message: 'Recipe updated successfully.', recipe: updatedRecipe})
         }
